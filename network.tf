@@ -39,3 +39,26 @@ resource "azurerm_subnet" "vpn" {
   virtual_network_name = azurerm_virtual_network.mexico.name
   address_prefixes     = ["10.1.1.0/24"]
 }
+
+data "azurerm_virtual_network" "australia" {
+  name                = "vnet-auex-vm"
+  resource_group_name = "RGAUEFAX"
+}
+
+resource "azurerm_virtual_network_peering" "mexico_to_australia" {
+  name                         = "peer-mxc-to-aue"
+  resource_group_name          = data.azurerm_resource_group.mexico.name
+  virtual_network_name         = azurerm_virtual_network.mexico.name
+  remote_virtual_network_id    = data.azurerm_virtual_network.australia.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+}
+
+resource "azurerm_virtual_network_peering" "australia_to_mexico" {
+  name                         = "peer-aue-to-mxc"
+  resource_group_name          = data.azurerm_virtual_network.australia.resource_group_name
+  virtual_network_name         = data.azurerm_virtual_network.australia.name
+  remote_virtual_network_id    = azurerm_virtual_network.mexico.id
+  allow_virtual_network_access = true
+  allow_forwarded_traffic      = true
+}
