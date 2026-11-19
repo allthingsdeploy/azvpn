@@ -78,7 +78,7 @@ resource "azurerm_linux_virtual_machine" "vpn" {
     runcmd:
       - [ bash, -lc, "printf 'net.ipv4.ip_forward=1\n' > /etc/sysctl.d/99-wireguard.conf && sysctl --system" ]
       - [ bash, -lc, "umask 077; wg genkey | tee /etc/wireguard/server_private.key | wg pubkey > /etc/wireguard/server_public.key" ]
-      - [ bash, -lc, "printf '[Interface]\nAddress = 10.2.0.1/24\nListenPort = 51820\nPrivateKey = %s\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n' "'$(cat /etc/wireguard/server_private.key)'" > /etc/wireguard/wg0.conf" ]
+      - [ bash, -lc, "PRIVATE_KEY=$(cat /etc/wireguard/server_private.key); printf '[Interface]\nAddress = 10.2.0.1/24\nListenPort = 51820\nPrivateKey = %s\nPostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -A FORWARD -o wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE\nPostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -D FORWARD -o wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE\n' \"$PRIVATE_KEY\" > /etc/wireguard/wg0.conf" ]
       - [ bash, -lc, "chmod 600 /etc/wireguard/wg0.conf /etc/wireguard/server_private.key /etc/wireguard/server_public.key" ]
       - [ systemctl, enable, --now, wg-quick@wg0 ]
   CLOUD_INIT
