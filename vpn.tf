@@ -66,7 +66,7 @@ resource "azurerm_linux_virtual_machine" "vpn" {
   location                        = data.azurerm_resource_group.mexico.location
   resource_group_name             = data.azurerm_resource_group.mexico.name
   size                            = "Standard_B2s_v2"
-  admin_username                  = "wireguard"
+  admin_username                  = "roberto"
   disable_password_authentication = true
   network_interface_ids           = [azurerm_network_interface.vpn.id]
   custom_data = base64encode(<<-CLOUD_INIT
@@ -85,7 +85,7 @@ resource "azurerm_linux_virtual_machine" "vpn" {
   )
 
   admin_ssh_key {
-    username   = "wireguard"
+    username   = "roberto"
     public_key = var.admin_ssh_public_key
   }
 
