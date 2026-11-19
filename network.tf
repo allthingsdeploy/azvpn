@@ -11,7 +11,8 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "cdfa317b-7cd2-48df-a47c-98541acf6ea6"
+  subscription_id                 = "cdfa317b-7cd2-48df-a47c-98541acf6ea6"
+  resource_provider_registrations = "none"
 }
 
 data "azurerm_resource_group" "mexico" {
