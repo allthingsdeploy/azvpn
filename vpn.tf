@@ -21,10 +21,10 @@ resource "azurerm_network_security_group" "vpn" {
     priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "40.77.167.0/24"
+    protocol                  = "Tcp"
+    source_port_range         = "*"
+    destination_port_range    = "22"
+    source_address_prefixes   = ["40.77.167.0/24", "1.145.167.172/32"]
     destination_address_prefix = "*"
   }
 
