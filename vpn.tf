@@ -1,7 +1,6 @@
-variable "admin_ssh_public_key" {
-  description = "SSH public key for the WireGuard server administrator."
-  type        = string
-  sensitive   = true
+data "azurerm_ssh_public_key" "roberto" {
+  name                = "robertodefault"
+  resource_group_name = "RGPKAUE"
 }
 
 resource "azurerm_public_ip" "vpn" {
@@ -86,7 +85,7 @@ resource "azurerm_linux_virtual_machine" "vpn" {
 
   admin_ssh_key {
     username   = "roberto"
-    public_key = var.admin_ssh_public_key
+    public_key = data.azurerm_ssh_public_key.roberto.public_key
   }
 
   os_disk {

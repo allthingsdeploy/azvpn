@@ -15,8 +15,6 @@ permissions:
 jobs:
   plan:
     runs-on: ubuntu-latest
-    env:
-      TF_VAR_admin_ssh_public_key: ${{ secrets.VM_SSH_PUBLIC_KEY }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
